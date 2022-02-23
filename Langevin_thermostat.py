@@ -7,6 +7,7 @@ Created on Mon Feb 21 17:35 2022
 
 import numpy as np
 import matplotlib.pylab as plt
+import utils
 
 
 def Verlet(positions, velocities, forces, mass, dt):
@@ -34,7 +35,7 @@ def computeInstTemp(velocities, mass, natoms, ndim):
 def run(**args):
     natoms, temp, mass, radius = args['natoms'], args['temp'], args['mass'], args['radius']
     dt, steps, freq, box, relax = args['dt'], args['steps'], args['freq'],args['box'],args['relax']
-    
+    outputFile = args['outputFile']
     output = []
     positions = np.random.rand(natoms, ndim)
     velocities = np.random.rand(natoms, ndim)
@@ -49,21 +50,24 @@ def run(**args):
         Verlet(positions, velocities, forces, mass, dt)
         CheckWall(positions, velocities, box, ndim, natoms)
         output.append([dt*nsteps, computeInstTemp(velocities, mass, natoms, ndim)])
-    return np.array(output)        
-    
+        if nsteps%freq == 0:
+            utils.writeOutput(outputFile, natoms, dt, box, positions, velocities, np.ones(natoms)*radius)
+    return np.array(output)  
+          
 avogadro = 6.02214086e23
 boltzmann = 1.38064852e-23
 ndim = 3
 params = {
-    'natoms': 1000,
+    'natoms': 500,
     'temp': 300,
     'mass': 0.001,
     'radius': 120e-12,
-    'relax' : 1e-12,
+    'relax' : 1e-13,
     'dt' : 1e-15,
     'steps' : 3000,
-    'freq' : 100,
-    'box' : ((0,1e-8),(0,1e-8),(0,1e-8))
+    'freq' : 10,
+    'box' : ((0,1e-8),(0,1e-8),(0,1e-8)),
+    'outputFile' : 'tray-Langevin-thermo.dump'
     }
 output = run(**params)
 plt.plot(output[:,0]*1e12, output[:,1])
