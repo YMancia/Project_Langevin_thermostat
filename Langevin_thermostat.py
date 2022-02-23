@@ -10,8 +10,8 @@ import matplotlib.pylab as plt
 
 
 def Verlet(positions, velocities, forces, mass, dt):
-    positions[:,:] = positions[:,:] + velocities[:,:]*dt
-    velocities[:,:] = velocities[:,:] + dt*forces[:,:]*(1/mass)
+    positions += velocities * dt
+    velocities += forces * dt / mass
 
 def CheckWall(positions, velocities, box, ndim, natoms):
     for i in range(ndim):
@@ -20,17 +20,16 @@ def CheckWall(positions, velocities, box, ndim, natoms):
                 velocities[atom, i] = velocities[atom, i]*(-1)
                 
                 
-def CalculateForces(positions, velocities, relax, mass, temp, dt):
-    sigma = np.sqrt(2*temp*boltzmann*mass/(relax*dt))
-    forces = np.random.normal(0, sigma, positions.shape)
-    forces[:,:] = forces[:,:] - mass*velocities/relax
+def CalculateForces(positions, velocities, relax, mass, temp, dt, natoms, ndim):
+    sigma = np.sqrt(2*boltzmann*temp*mass/(relax*dt))
+    forces = np.random.normal(0, sigma, positions.shape) - (velocities*mass)/relax
     return forces
 
-def computeInstTemp(velocities, mass, natoms):
+def computeInstTemp(velocities, mass, natoms, ndim):
     temp = 0
     for vx, vy, vz in velocities:
-        temp = temp + mass*(vx**2 + vy**2 + vz**2)
-    return temp/natoms
+        temp += (vx**2 + vy**2 + vz**2)*mass/(boltzmann*natoms*ndim)
+    return temp
 
 def run(**args):
     natoms, temp, mass, radius = args['natoms'], args['temp'], args['mass'], args['radius']
@@ -39,16 +38,18 @@ def run(**args):
     output = []
     positions = np.random.rand(natoms, ndim)
     velocities = np.random.rand(natoms, ndim)
+    mass = mass/avogadro
+    masses = np.ones(natoms)*mass
     for i in range(ndim):
         positions[:,i] *= box[i][0] + (box[i][1] - box[i][0])
     
     nsteps = 0
     while (nsteps < steps):
         nsteps += 1
-        forces = CalculateForces(positions, velocities, relax, mass, temp, dt)
+        forces = CalculateForces(positions, velocities, relax, mass, temp, dt, natoms, ndim)
         Verlet(positions, velocities, forces, mass, dt)
         CheckWall(positions, velocities, box, ndim, natoms)
-        output.append([dt*nsteps, computeInstTemp(velocities, mass, natoms)])
+        output.append([dt*nsteps, computeInstTemp(velocities, mass, natoms, ndim)])
     return np.array(output)        
     
 avogadro = 6.02214086e23
@@ -59,7 +60,7 @@ params = {
     'temp': 300,
     'mass': 0.001,
     'radius': 120e-12,
-    'relax' : 1e-13,
+    'relax' : 1e-14,
     'dt' : 1e-15,
     'steps' : 3000,
     'freq' : 100,
