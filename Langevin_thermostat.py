@@ -39,7 +39,6 @@ def run(**args):
     positions = np.random.rand(natoms, ndim)
     velocities = np.random.rand(natoms, ndim)
     mass = mass/avogadro
-    masses = np.ones(natoms)*mass
     for i in range(ndim):
         positions[:,i] *= box[i][0] + (box[i][1] - box[i][0])
     
@@ -60,7 +59,7 @@ params = {
     'temp': 300,
     'mass': 0.001,
     'radius': 120e-12,
-    'relax' : 1e-14,
+    'relax' : 1e-12,
     'dt' : 1e-15,
     'steps' : 3000,
     'freq' : 100,
