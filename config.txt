@@ -3,8 +3,8 @@ temp 400
 mass 0.001
 radius 120e-12
 relax  1e-13
-timeStep  1e-15
-maxSteps 3000
+timestep  1e-15
+maxsteps 3000
 box 0 1e-8 0 1e-8 0 1e-8
-outputFreq 10
-outputFile  tray-Langevin-thermo.dump
+outputfreq 10
+outputfile  tray-Langevin-thermo.dump
