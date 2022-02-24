@@ -1,5 +1,5 @@
 natoms 500
-temp 400
+temp 300
 mass 0.001
 radius 120e-12
 relax  1e-13

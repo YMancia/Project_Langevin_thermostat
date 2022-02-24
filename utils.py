@@ -9,6 +9,9 @@ import numpy as np
 import datetime
 
 def inputParams():
+    """This function creates a parameter dictionary with default values, then uses the values
+    from the config file replacing the ones in initial dictionary, if a parameter is not 
+    present in the config file, it keeps the default values."""
     try:
         log('---STARTING PARAMETERS LOADING---')
 
@@ -52,18 +55,22 @@ def inputParams():
         return params
     
 def ClearOutput(filename):
+    """clears the output file"""
     open(filename, 'w')
 
 def ClearLog():
+    """clears the log file"""
     logFile = 'Langevin-simulation-log.txt'
     open(logFile, 'w')
     
 def log(string):
+    """a simple logging function with date and time"""
     with open('Langevin-simulation-log.txt', 'a') as fp:
         fp.write(str(datetime.datetime.now()) + '\t' + string + '\n')
 
 def writeOutput(filename, natoms, timestep, box, positions, velocities, radius):
-    
+    """This function writes the positions and velocities of each particle at each timestep in a
+    dump file, this format can be opened with a molecular visualization tool"""
     fp = open(filename, 'a')
     fp.write('ITEM: TIMESTEP\n')
     fp.write(f'{timestep}\n')
