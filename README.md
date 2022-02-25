@@ -22,6 +22,8 @@ Reflecting boundary conditions are applied to the system: each time a particles 
 1. The config.txt file has to be written in order to setup the initial parameters. If any of the parameters is not provided in the file the software will use the default values, informing the user through the simulation log ('Langevin-simulation-log.txt').
 2. The module 'utils.py' contains the input and output, the logging and the plotting functions.
 3. The main simulation is contained in the 'Langevin_thermostat.py' module
+4. The output of the simulation is stored in the Output folder
+4. A testing module is also present ('test.py')
 
 
 # Installation
@@ -32,6 +34,10 @@ git clone https://github.com/Mitenus/Project_Langevin_thermostat
 pip install numpy
 pip install datetime
 pip install matlplotlib
+```
+The test module uses also the hypothesis library:
+```
+pip install hypothesis
 ```
 In order to visualize the simulation trajectory you will need to install a visualization tool, OVITO is suggested: https://www.ovito.org/
 Open the tool and import the data as LAMMPS text dump file ('auto-detect format file' would cause a crash). Set the visualization speed at 60 fps for a clear view.
