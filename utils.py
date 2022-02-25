@@ -40,6 +40,7 @@ def inputParams():
                     box = ((float(values[1]),float(values[2])), (float(values[3]),float(values[4])), 
                            (float(values[5]),float(values[6])))
                     params['box'] = box
+                    defaultParams.pop('box')
                     log(f'INFO\tSetting the parameter box = {box}.')
             
                 else:
