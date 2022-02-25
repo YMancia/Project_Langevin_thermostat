@@ -15,6 +15,7 @@ Created on Mon Feb 21 17:35 2022
 import numpy as np
 import utils
 import matplotlib.pylab as plt
+
 def Integration(positions, velocities, forces, mass, dt):
     """ A simple forward Euler integrator that moves the system in time 
     positions: atomic positions (ndarray, updated)
@@ -35,7 +36,7 @@ def CheckWall(positions, velocities, box):
     natoms, ndim = positions.shape
     for i in range(ndim):
         for atom in range(natoms):
-            if (positions[atom,i] > box[i][1] or positions[atom,i] < box[i][0]):
+            if (positions[atom,i] >= box[i][1] or positions[atom,i] <= box[i][0]):
                 velocities[atom, i] = velocities[atom, i]*(-1)
                 
                 
@@ -79,8 +80,8 @@ def run(**args):
         @args: dictionary with the input parameters
         """
         
-        natoms, temp, mass, radius = int(args['natoms']), float(args['temp']), float(args['mass']), float(args['radius'])
-        dt, steps, freq, box, relax = float(args['timestep']), int(args['maxsteps']), int(args['outputfreq']),args['box'],float(args['relax'])
+        natoms, temp, mass, radius = args['natoms'], args['temp'], args['mass'], args['radius']
+        dt, steps, freq, box, relax = args['timestep'], args['maxsteps'], args['outputfreq'], args['box'] ,args['relax']
         outputFile = args['outputfile']
         
         """Declaring the positions and the velocities arrays

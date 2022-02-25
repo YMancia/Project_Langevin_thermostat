@@ -5,7 +5,6 @@ Created on Wed Feb 23 17:09:27 2022
 @author: youri
 """
 
-import numpy as np
 import datetime
 import matplotlib.pylab as plt
 
@@ -48,7 +47,16 @@ def inputParams():
                     log(f'WARNING\tNo parameter name found for {key} - skipping it.')
         for key in defaultParams.keys():
             log(f'INFO\tSetting {key} to default value.')
-            
+        
+        """setting the parameters to the correct data type"""    
+        params['natoms'] = int(params['natoms'])
+        params['maxsteps'] = int(params['maxsteps'])
+        params['outputfreq'] = int(params['outputfreq'])
+        params['temp'] = float(params['temp'])
+        params['mass'] = float(params['mass'])
+        params['relax'] = float(params['relax'])
+        params['timestep'] = float(params['timestep'])
+        params['radius'] = float(params['radius'])
     except Exception as err:
         error = str(err)
         log(f'An error occurred while loading the input parameters: {error}')
@@ -94,6 +102,5 @@ def plot(output):
     plt.xlabel('Time (ps)')
     plt.ylabel('Temp (K)')
     plt.savefig(path + 'Simulation_Temperature.png')
-    plt.show()
     
         
