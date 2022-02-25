@@ -40,7 +40,7 @@ def CheckWall(positions, velocities, box):
                 velocities[atom, i] = velocities[atom, i]*(-1)
                 
                 
-def CalculateForces(positions, velocities, relax, mass, temp, timeStep):
+def CalculateForces(velocities, relax, mass, temp, timeStep):
     """ Computes the Langevin force for all particles
     @mass: particle mass (ndarray)
     @velocities: particle velocities (ndarray)
@@ -51,7 +51,7 @@ def CalculateForces(positions, velocities, relax, mass, temp, timeStep):
     """
     natoms, ndim = velocities.shape
     sigma = np.sqrt(2*boltzmann*temp*mass/(relax*timeStep))
-    forces = np.random.normal(0, sigma, positions.shape) - (velocities*mass)/relax
+    forces = np.random.normal(0, sigma, velocities.shape) - (velocities*mass)/relax
     return forces
 
 def computeInstTemp(velocities, mass):
@@ -102,7 +102,7 @@ def run(**args):
             nsteps += 1
             
             """calculating the forces"""
-            forces = CalculateForces(positions, velocities, relax, mass, temp, dt)
+            forces = CalculateForces(velocities, relax, mass, temp, dt)
             
             """integrating"""
             Integration(positions, velocities, forces, mass, dt)
