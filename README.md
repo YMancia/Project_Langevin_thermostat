@@ -18,13 +18,13 @@ Reflecting boundary conditions are applied to the system: each time a particles 
 4. At the end of the simulation a .dump file is created in order to store the trajectories of the particles. This file can be opened by using a simple visualization tool (like OVITO) and the whole timeline can be visualized.
 5. The whole simulation is tracked by a log which provides any error, warning or info to the user.
 
-#Structure of the project
+# Structure of the project
 1. The config.txt file has to be written in order to setup the initial parameters. If any of the parameters is not provided in the file the software will use the default values, informing the user through the simulation log ('Langevin-simulation-log.txt').
 2. The module 'utils.py' contains the input and output, the logging and the plotting functions.
 3. The main simulation is contained in the 'Langevin_thermostat.py' module
 
 
-#Installation
+# Installation
 The project requires: numpy, datetime and matplotlib.
 Install the repository and the requirements by typing:
 ```
