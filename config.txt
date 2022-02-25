@@ -7,4 +7,4 @@ timestep  1e-15
 maxsteps 3000
 box 0 1e-8 0 1e-8 0 1e-8
 outputfreq 10
-outputfile  tray-Langevin-thermo.dump
+outputfile  tray-Langevin-thermo

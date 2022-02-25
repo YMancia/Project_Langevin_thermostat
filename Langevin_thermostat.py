@@ -13,9 +13,8 @@ Created on Mon Feb 21 17:35 2022
 # --------------------------------------------------------------------------
 
 import numpy as np
-import matplotlib.pylab as plt
 import utils
-
+import matplotlib.pylab as plt
 def Integration(positions, velocities, forces, mass, dt):
     """ A simple forward Euler integrator that moves the system in time 
     positions: atomic positions (ndarray, updated)
@@ -132,11 +131,13 @@ ndim = 3
 utils.ClearLog()
 """input the parameters"""
 params = utils.inputParams()
+
+"""clears the output file"""
 utils.ClearOutput(params['outputfile'])
+
+"""runs the simulation"""
 output = run(**params)
 
-"""plots the time in picoseconds (1e12) vs the calculated temperature"""
-plt.plot(output[:,0]*1e12, output[:,1])
-plt.xlabel('Time (ps)')
-plt.ylabel('Temp (K)')
-plt.show()
+"""plots the output"""
+utils.plot(output)
+
