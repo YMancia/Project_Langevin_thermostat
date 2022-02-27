@@ -23,7 +23,7 @@ def inputParams():
                   'timestep': 1e-15, 
                   'maxsteps' : 3000, 
                   'outputfreq' : 10, 
-                  'outputfile': 'tray-Langevin-thermo.dump', 
+                  'outputfile': 'tray-Langevin-thermo', 
                   'box' : ((0, 1e-8), (0, 1e-8), (0, 1e-8))}
     
         defaultParams = params.copy()
