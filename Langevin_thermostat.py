@@ -54,7 +54,7 @@ def CalculateForces(velocities, relax, mass, temp, timeStep):
     forces = np.random.normal(0, sigma, velocities.shape) - (velocities*mass)/relax
     return forces
 
-def computeInstTemp(velocities, mass):
+def ComputeInstTemp(velocities, mass):
     """ Computes the Temperature starting from the velocities of the particles
     @mass: particle mass (ndarray)
     @velocities: particle velocities (ndarray)
@@ -84,9 +84,9 @@ def CoordInitialitation(box, natoms, ndim):
     """Updating the positions in order to have the molecules all inside the box"""
     for i in range(ndim):
         positions[:,i] *= box[i][0] + (box[i][1] - box[i][0])
-        return positions, velocities
+    return positions, velocities
 
-def run(**args):
+def RunSimulation(**args):
     """ Takes in input the parameters of a the simulation, calls the initialization function, 
     and calls the force-computing, position-velocities updating and buondary enforcement 
     functions until the max number of steps is reached, returning an array made from timestep
@@ -129,15 +129,15 @@ def run(**args):
             
             """exporting the output using the output exporting frequency set in the
             config parameters"""
-            output.append([dt*step, computeInstTemp(velocities, mass)])
+            output.append([dt*step, ComputeInstTemp(velocities, mass)])
             if step%freq == 0:
                 utils.writeOutput(outputFile, natoms, dt, box, positions, velocities, np.ones(natoms)*radius)
-                utils.log(f'INFO\tExporting output to {outputFile} at step {nsteps}.')
+                utils.log(f'INFO\tExporting output to {outputFile} at step {step}.')
                 
                 
     except Exception as err:
         error = str(err)
-        utils.log(f'An error occurred while the simulation was running at step {nsteps}: {error}')
+        utils.log(f'An error occurred while the simulation was running: {error}')
     utils.log('---ENDING SIMULATION---')
     return np.array(output)  
 
@@ -148,13 +148,13 @@ ndim = 3
 """clearing the log file"""
 utils.ClearLog()
 """input the parameters"""
-params = utils.inputParams()
+params = utils.inputParams('config.txt')
 
 """clears the output file"""
 utils.ClearOutput(params['outputfile'])
 
 """runs the simulation"""
-output = run(**params)
+output = RunSimulation(**params)
 
 """plots the output"""
 utils.plot(output)
