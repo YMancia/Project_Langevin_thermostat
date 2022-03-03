@@ -16,7 +16,7 @@ import numpy as np
 import utils
 import matplotlib.pylab as plt
 
-def Integration(positions, velocities, forces, mass, dt):
+def MotionIntegration(positions, velocities, forces, mass, dt):
     """ A simple forward Euler integrator that moves the system in time 
     positions: atomic positions (ndarray, updated)
     velocities: atomic velocity (ndarray, updated)
@@ -24,7 +24,7 @@ def Integration(positions, velocities, forces, mass, dt):
     positions += velocities * dt
     velocities += forces * dt / mass
 
-def CheckWall(positions, velocities, box):
+def EnforceWallReflection(positions, velocities, box):
     
     """ This function enforces reflective boundary conditions.
     All particles that hit a wall have their velocity updated
@@ -61,7 +61,7 @@ def computeInstTemp(velocities, mass):
     @temp: temperature (float)
     @relax: thermostat constant (float)
     @timestep: simulation timestep (float)
-    returns forces (ndarray)
+    returns Temperature (float)
     """
     natoms, ndim = velocities.shape
     temp = 0
@@ -75,6 +75,7 @@ def run(**args):
     functions until the max number of steps is reached, returning an array made from timestep
     and temperature calculated at each step.
     @**args: dictionary with the input parameters
+    returns output: array with (timestep*step, Temperature) (2,natoms)
     """
     try:
         utils.log('---STARTING SIMULATION---')
@@ -114,7 +115,7 @@ def run(**args):
             Integration(positions, velocities, forces, mass, dt)
             
             """applying reflective boundaries"""
-            CheckWall(positions, velocities, box)
+            EnforceWallReflection(positions, velocities, box)
             
             """exporting the output using the output exporting frequency set in the
             config parameters"""

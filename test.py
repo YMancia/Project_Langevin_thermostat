@@ -14,8 +14,8 @@ from hypothesis import settings
 from hypothesis import given
 
 @given(natoms=st.integers(1,10000)) 
-def test_CheckWall(natoms):
-    """This function tests the CheckWall function by creating a position array of natoms
+def test_EnforceWallReflection(natoms):
+    """This function tests the EnforceWallReflection function by creating a position array of natoms
     at the borders of the box and checking that the velocity after the CheckWall are all
     reverted
     @natoms: number of atoms (int)
