@@ -47,6 +47,7 @@ def inputParams():
             
                 else:
                     log(f'WARNING\tNo parameter name found for {key} - skipping it.')
+        file.close()
         for key in defaultParams.keys():
             log(f'INFO\tSetting {key} to default value.')
         
@@ -71,14 +72,16 @@ def ClearOutput(filename):
     @filename: name of the output file (string)
     """
     path = './Output/'
-    open(path + filename + '.dump', 'w')
+    fp = open(path + filename + '.dump', 'w')
+    fp.close()
 
 def ClearLog(filename):
     """clears the log file
     @filename: name of the log file (string)
     """
     logFile = 'Langevin-simulation-log.txt'
-    open(logFile, 'w')
+    fp = open(logFile, 'w')
+    fp.close()
     
 def log(filename, textString):
     """a simple logging function with date and time
@@ -87,6 +90,7 @@ def log(filename, textString):
     """
     with open(filename, 'a') as fp:
         fp.write(str(datetime.datetime.now()) + '\t' + textString + '\n')
+        fp.close()
 
 def writeOutput(filename, natoms, timestep, box, positions, velocities, radius):
     """This function writes the positions and velocities of each particle at each timestep in a
@@ -110,6 +114,7 @@ def writeOutput(filename, natoms, timestep, box, positions, velocities, radius):
     fp.write('ITEM: ATOMS radius x y z vx vy vz\n')
     for atom in range(natoms):
         fp.write(f'{radius[atom]} {positions[atom,0]} {positions[atom,1]} {positions[atom,2]} {velocities[atom,0]} {velocities[atom,1]} {velocities[atom,2]}\n')
+    fp.close()
                 
 def plot(output):
     """plots the time in picoseconds (1e12) vs the calculated temperature
