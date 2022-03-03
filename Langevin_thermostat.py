@@ -69,6 +69,23 @@ def computeInstTemp(velocities, mass):
         temp += (vx**2 + vy**2 + vz**2)*mass/(boltzmann*natoms*ndim)
     return temp
 
+def CoordInitialitation(box, natoms, ndim):
+    """This function initializes the position and velocity arrays with random numbers
+    between 0 and 1 with dimension (natoms, ndim). Then scales the positions so that all the
+    atoms are contained in the box.
+    @box : box size (2, ndim) tuple
+    @natoms: number of atoms (int)
+    @ndim: number of dimensions (int)
+    """
+    
+    positions = np.random.rand(natoms, ndim)
+    velocities = np.random.rand(natoms, ndim)
+        
+    """Updating the positions in order to have the molecules all inside the box"""
+    for i in range(ndim):
+        positions[:,i] *= box[i][0] + (box[i][1] - box[i][0])
+        return positions, velocities
+
 def run(**args):
     """ Takes in input the parameters of a the simulation, calls the initialization function, 
     and calls the force-computing, position-velocities updating and buondary enforcement 
@@ -88,39 +105,32 @@ def run(**args):
         """
         
         natoms, temp, mass, radius = args['natoms'], args['temp'], args['mass'], args['radius']
-        dt, steps, freq, box, relax = args['timestep'], args['maxsteps'], args['outputfreq'], args['box'] ,args['relax']
+        dt, maxSteps, freq, box, relax = args['timestep'], args['maxsteps'], args['outputfreq'], args['box'] ,args['relax']
         outputFile = args['outputfile']
-        
-        """Declaring the positions and the velocities arrays
-        with natoms rows and ndim columns
-        """
-        positions = np.random.rand(natoms, ndim)
-        velocities = np.random.rand(natoms, ndim)
         
         """setting the mass as the molecular mass"""
         mass = mass/avogadro
         
-        """Updating the positions in order to have the molecules all inside the box"""
-        for i in range(ndim):
-            positions[:,i] *= box[i][0] + (box[i][1] - box[i][0])
+        """Initializing the velocities and the positions"""
+        positions, velocities = CoordInitialitation(box, natoms, ndim)
+        
 
         """starting the iteration"""
-        while (nsteps < steps):
-            nsteps += 1
+        for step in range(maxSteps):
             
             """calculating the forces"""
             forces = CalculateForces(velocities, relax, mass, temp, dt)
             
             """integrating"""
-            Integration(positions, velocities, forces, mass, dt)
+            MotionIntegration(positions, velocities, forces, mass, dt)
             
             """applying reflective boundaries"""
             EnforceWallReflection(positions, velocities, box)
             
             """exporting the output using the output exporting frequency set in the
             config parameters"""
-            output.append([dt*nsteps, computeInstTemp(velocities, mass)])
-            if nsteps%freq == 0:
+            output.append([dt*step, computeInstTemp(velocities, mass)])
+            if step%freq == 0:
                 utils.writeOutput(outputFile, natoms, dt, box, positions, velocities, np.ones(natoms)*radius)
                 utils.log(f'INFO\tExporting output to {outputFile} at step {nsteps}.')
                 
