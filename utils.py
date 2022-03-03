@@ -8,7 +8,7 @@ Created on Wed Feb 23 17:09:27 2022
 import datetime
 import matplotlib.pylab as plt
 
-def inputParams():
+def inputParams(filename):
     """This function creates a parameter dictionary with default values, then uses the values
     from the config file replacing the ones in initial dictionary, if a parameter is not 
     present in the config file, it keeps the default values.
@@ -29,7 +29,7 @@ def inputParams():
                   'box' : ((0, 1e-8), (0, 1e-8), (0, 1e-8))}
     
         defaultParams = params.copy()
-        with open("config.txt",'r') as file:
+        with open(filename,'r') as file:
             for line in file:
                 values = line.split()
                 (key, value) = values[0], values[1]
@@ -60,9 +60,15 @@ def inputParams():
         params['relax'] = float(params['relax'])
         params['timestep'] = float(params['timestep'])
         params['radius'] = float(params['radius'])
-    except Exception as err:
+        
+        for key in params.keys():
+            if params[key] == 0:
+                log(f'An error occurred while loading the input parameters value: The parameter {key} cannot be 0')
+                raise Exception(f"The parameter {key} cannot be 0")
+                
+    except TypeError as err:
         error = str(err)
-        log(f'An error occurred while loading the input parameters: {error}')
+        log(f'An error occurred while loading the input parameters Type: {error}')
     finally:
         log('---ENDING PARAMETERS LOADING---')
         return params
@@ -75,7 +81,7 @@ def ClearOutput(filename):
     fp = open(path + filename + '.dump', 'w')
     fp.close()
 
-def ClearLog(filename):
+def ClearLog():
     """clears the log file
     @filename: name of the log file (string)
     """
@@ -83,12 +89,13 @@ def ClearLog(filename):
     fp = open(logFile, 'w')
     fp.close()
     
-def log(filename, textString):
+def log(textString):
     """a simple logging function with date and time
     @filename: name of the log file (string)
     @textString: logging string (string)
     """
-    with open(filename, 'a') as fp:
+    logFile = 'Langevin-simulation-log.txt'
+    with open(logFile, 'a') as fp:
         fp.write(str(datetime.datetime.now()) + '\t' + textString + '\n')
         fp.close()
 
@@ -114,7 +121,7 @@ def writeOutput(filename, natoms, timestep, box, positions, velocities, radius):
     fp.write('ITEM: ATOMS radius x y z vx vy vz\n')
     for atom in range(natoms):
         fp.write(f'{radius[atom]} {positions[atom,0]} {positions[atom,1]} {positions[atom,2]} {velocities[atom,0]} {velocities[atom,1]} {velocities[atom,2]}\n')
-    fp.close()
+        
                 
 def plot(output):
     """plots the time in picoseconds (1e12) vs the calculated temperature
