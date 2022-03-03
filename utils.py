@@ -11,7 +11,9 @@ import matplotlib.pylab as plt
 def inputParams():
     """This function creates a parameter dictionary with default values, then uses the values
     from the config file replacing the ones in initial dictionary, if a parameter is not 
-    present in the config file, it keeps the default values."""
+    present in the config file, it keeps the default values.
+    @filename: name of the input file (string)
+    """
     try:
         log('---STARTING PARAMETERS LOADING---')
 
@@ -65,23 +67,37 @@ def inputParams():
         return params
     
 def ClearOutput(filename):
-    """clears the output file"""
+    """clears the output file.
+    @filename: name of the output file (string)
+    """
     path = './Output/'
     open(path + filename + '.dump', 'w')
 
-def ClearLog():
-    """clears the log file"""
+def ClearLog(filename):
+    """clears the log file
+    @filename: name of the log file (string)
+    """
     logFile = 'Langevin-simulation-log.txt'
     open(logFile, 'w')
     
-def log(string):
-    """a simple logging function with date and time"""
-    with open('Langevin-simulation-log.txt', 'a') as fp:
-        fp.write(str(datetime.datetime.now()) + '\t' + string + '\n')
+def log(filename, textString):
+    """a simple logging function with date and time
+    @filename: name of the log file (string)
+    @textString: logging string (string)
+    """
+    with open(filename, 'a') as fp:
+        fp.write(str(datetime.datetime.now()) + '\t' + textString + '\n')
 
 def writeOutput(filename, natoms, timestep, box, positions, velocities, radius):
     """This function writes the positions and velocities of each particle at each timestep in a
-    dump file, this format can be opened with a molecular visualization tool"""
+    dump file, this format can be opened with a molecular visualization tool
+    @filename: name of the output file (string)
+    @natoms: number of atoms (int)
+    timestep: timestep of the simulation (float)
+    box: box size (float (3,2)-tuple)
+    positions: atomic positions (ndarray)
+    velocities: atomic velocity (ndarray)
+    """
     path = './Output/'
     fp = open(path + filename + '.dump', 'a')
     fp.write('ITEM: TIMESTEP\n')
@@ -96,7 +112,9 @@ def writeOutput(filename, natoms, timestep, box, positions, velocities, radius):
         fp.write(f'{radius[atom]} {positions[atom,0]} {positions[atom,1]} {positions[atom,2]} {velocities[atom,0]} {velocities[atom,1]} {velocities[atom,2]}\n')
                 
 def plot(output):
-    """plots the time in picoseconds (1e12) vs the calculated temperature"""
+    """plots the time in picoseconds (1e12) vs the calculated temperature
+    @output: output array with (timestep*step, Temperature) (2,natoms) - array
+    """
     path = './Output/'
     plt.plot(output[:,0]*1e12, output[:,1])
     plt.xlabel('Time (ps)')
