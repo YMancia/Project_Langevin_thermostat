@@ -70,6 +70,12 @@ def computeInstTemp(velocities, mass):
     return temp
 
 def run(**args):
+    """ Takes in input the parameters of a the simulation, calls the initialization function, 
+    and calls the force-computing, position-velocities updating and buondary enforcement 
+    functions until the max number of steps is reached, returning an array made from timestep
+    and temperature calculated at each step.
+    @**args: dictionary with the input parameters
+    """
     try:
         utils.log('---STARTING SIMULATION---')
         
