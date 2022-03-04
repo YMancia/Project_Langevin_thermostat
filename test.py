@@ -158,7 +158,7 @@ def test_inputParams():
                        'timestep': 987, 
                        'maxsteps' : 10000, 
                        'outputfreq' : 1000, 
-                       'outputfile': 'tray-Langevin-thermo', 
+                       'outputfile': 'tray-Langevin-thermo_TEST', 
                        'box' : ((0, 1e-8), (0, 1e-8), (0, 1e-8))}
     
     diffBoxParams = utils.inputParams('Config_Test/diffBoxParams.txt')
