@@ -97,7 +97,6 @@ def RunSimulation(**args):
     try:
         utils.log('---STARTING SIMULATION---')
         
-        nsteps = 0
         output = []
         
         """ Setting up the parameters from the args passed
