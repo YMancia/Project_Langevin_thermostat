@@ -23,7 +23,8 @@ Reflecting boundary conditions are applied to the system: each time a particles 
 2. The module 'utils.py' contains the input and output, the logging and the plotting functions.
 3. The main simulation is contained in the 'Langevin_thermostat.py' module
 4. The output of the simulation is stored in the Output folder
-4. A testing module is also present ('test.py')
+5. A testing module is also present ('test.py')
+6. The folder 'Config_Test' contains a set of test configuration files used for testing the Input function of the simulation
 
 
 # Installation
@@ -33,7 +34,7 @@ Install the repository and the requirements by typing:
 git clone https://github.com/Mitenus/Project_Langevin_thermostat
 pip install numpy
 pip install datetime
-pip install matlplotlib
+pip install matplotlib
 ```
 The test module uses also the hypothesis library:
 ```
