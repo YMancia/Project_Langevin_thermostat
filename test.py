@@ -90,7 +90,6 @@ def test_MotionIntegration2():
     mass = 0.001
     dt = 1e-15
     ndim = 3
-    box = ((0, 1e-8), (0, 1e-8), (0, 1e-8))
     positions = np.random.rand(4, ndim)
     afterIntegPositions = positions.copy()
     velocities = np.random.rand(4, ndim)
