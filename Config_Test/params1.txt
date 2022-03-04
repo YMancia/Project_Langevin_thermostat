@@ -1,0 +1,9 @@
+natoms 5000
+temp 500
+mass 15
+radius 432
+relax  667
+timestep  987
+maxsteps 10000
+outputfreq 1000
+outputfile  tray-Langevin-thermo_TEST
