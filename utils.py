@@ -30,6 +30,8 @@ def inputParams(filename):
     
         defaultParams = params.copy()
         with open(filename,'r') as file:
+            
+            
             for line in file:
                 values = line.split()
                 (key, value) = values[0], values[1]
@@ -69,6 +71,10 @@ def inputParams(filename):
     except TypeError as err:
         error = str(err)
         log(f'An error occurred while loading the input parameters Type: {error}')
+        
+    except FileNotFoundError as err:
+        log(f'The config file was not found.')
+        
     finally:
         log('---ENDING PARAMETERS LOADING---')
         return params
